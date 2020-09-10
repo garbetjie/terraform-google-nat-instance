@@ -18,7 +18,7 @@ variable disk_size {
 
 variable disk_type {
   type = string
-  default = "pd-standard"
+  default = "pd-balanced"
 }
 
 locals {
@@ -31,7 +31,5 @@ iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
 apt-get install -y nftables
 nft add rule nat POSTROUTING masquerade
-
-# 2
 EOT
 }
