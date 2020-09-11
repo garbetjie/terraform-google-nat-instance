@@ -68,5 +68,6 @@ resource google_compute_route route {
   tags = local.network_tags
   priority = var.route_priority
   next_hop_instance = google_compute_instance.instance.self_link
+  next_hop_instance_zone = google_compute_instance.instance.zone
   depends_on = [null_resource.delay_between_instance_and_route]
 }
