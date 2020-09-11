@@ -34,12 +34,12 @@ output machine_type {
 }
 
 output disk_size {
-  value = google_compute_instance.instance.boot_disk.initialize_params.size
+  value = google_compute_instance.instance.boot_disk[0].initialize_params.size
   description = "Size of the instance's disk (in GB)."
 }
 
 output disk_type {
-  value = google_compute_instance.instance.boot_disk.initialize_params.type
+  value = google_compute_instance.instance.boot_disk[0].initialize_params.type
   description = "Type of the instance's disk."
 }
 
