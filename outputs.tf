@@ -47,3 +47,8 @@ output wait_duration {
   value = var.wait_duration
   description = "The duration (in seconds) that was allowed for the NAT instance to finish booting."
 }
+
+output network_tags {
+  value = google_compute_route.route.tags
+  description = "Tags to which this instance's route applies."
+}

@@ -37,15 +37,16 @@ module nat_instance_01 {
 
 ## Inputs
 
-| Name           | Description                                                                                                                                    | Type   | Default       | Required |
-|----------------|------------------------------------------------------------------------------------------------------------------------------------------------|--------|---------------|----------|
-| address        | The external IP address to assign to this instance.                                                                                            | string | N/A           | Yes      |
-| disk_size      | Size of the instance's disk (in GB)                                                                                                            | number | `15`          | No       |
-| disk_type      | Type of the instance's disk (one of `pd-standard` or `pd-ssd`). `google` provider `>= 3.37` allows the option of `pd-balanced` to be provided. | string | `pd-standard` | No       |
-| machine_type   | Machine type of the instance.                                                                                                                  | string | `f1-micro`    | No       |
-| route_priority | The priority to assign the networking route that routes traffic through this instance.                                                         | number | `900`         | No       |
-| wait_duration  | The duration (in seconds) to wait for the NAT instance to finish starting up.                                                                  | number | `10`          | No       |
-| zone           | The zone in which to place this instance. Must be the same region as the IP address provided.                                                  | string | N/A           | Yes      |
+| Name           | Description                                                                                                                                    | Type         | Default                            | Required |
+|----------------|------------------------------------------------------------------------------------------------------------------------------------------------|--------------|------------------------------------|----------|
+| address        | The external IP address to assign to this instance.                                                                                            | string       |                                    | Yes      |
+| zone           | The zone in which to place this instance. Must be the same region as the IP address provided.                                                  | string       |                                    | Yes      |
+| disk_size      | Size of the instance's disk (in GB)                                                                                                            | number       | `15`                               | No       |
+| disk_type      | Type of the instance's disk (one of `pd-standard` or `pd-ssd`). `google` provider `>= 3.37` allows the option of `pd-balanced` to be provided. | string       | `pd-standard`                      | No       |
+| machine_type   | Machine type of the instance.                                                                                                                  | string       | `f1-micro`                         | No       |
+| network_tags   | Tags to which this route applies.                                                                                                              | list(string) | `["requires-nat-${local.region}"]` | No       |
+| route_priority | The priority to assign the networking route that routes traffic through this instance.                                                         | number       | `900`                              | No       |
+| wait_duration  | The duration (in seconds) to wait for the NAT instance to finish starting up.                                                                  | number       | `10`                               | No       |
 
 
 ## Outputs
@@ -58,6 +59,7 @@ module nat_instance_01 {
 | instance_name  | Name of the Compute Engine instance.                                                   |
 | machine_type   | Machine type of the instance.                                                          |
 | nat_address    | NAT IP address of this NAT instance.                                                   |
+| network_tags   | Tags to which this instance's routes applies.                                          |
 | route_name     | Name of the route used to route traffic through the instance.                          |
 | route_priority | Priority assigned to the networking route used to route traffic through this instance. |
 | wait_duration  | The duration (in seconds) that was allowed for the NAT instance to finish booting.     |

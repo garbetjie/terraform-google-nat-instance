@@ -65,7 +65,7 @@ resource google_compute_route route {
   name = google_compute_instance.instance.name
   network = "default"
   dest_range = "0.0.0.0/0"
-  tags = ["requires-nat-${local.region}"]
+  tags = local.network_tags
   priority = var.route_priority
   next_hop_instance = google_compute_instance.instance.self_link
   depends_on = [null_resource.delay_between_instance_and_route]

@@ -44,7 +44,15 @@ variable route_priority {
   description = "The priority to assign the networking route that routes traffic through this instance."
 }
 
+variable network_tags {
+  type = list(string)
+  default = null
+  description = "Tags to which this route applies. Defaults to [\"requires-nat-$${local.region}\"]"
+}
+
 locals {
+  network_tags = var.network_tags == null ? ["requires-nat-${local.region}"] : var.network_tags
+
   region = join("-", slice(split("-", var.zone), 0, 2))
 
   startup_script = <<EOT
