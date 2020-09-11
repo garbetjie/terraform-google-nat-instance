@@ -53,7 +53,7 @@ resource google_compute_instance instance {
 
 resource null_resource delay_between_instance_and_route {
   provisioner "local-exec" {
-    command = "sleep 10"
+    command = "sleep ${var.wait_duration}"
   }
 
   triggers = {
@@ -66,7 +66,7 @@ resource google_compute_route route {
   network = "default"
   dest_range = "0.0.0.0/0"
   tags = ["requires-nat-${local.region}"]
-  priority = 900
+  priority = var.route_priority
   next_hop_ip = google_compute_address.address.address
   depends_on = [null_resource.delay_between_instance_and_route]
 }

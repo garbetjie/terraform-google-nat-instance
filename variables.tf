@@ -26,6 +26,24 @@ variable disk_type {
   description = "Type of the instance's disk (one of `pd-standard` or `pd-ssd`). `google` provider `>= 3.37` allows the option of `pd-balanced` to be provided."
 }
 
+//variable sysctl_config {
+//  type = map(string)
+//  default = {}
+//  description = "sysctl configuration to apply on startup."
+//}
+
+variable wait_duration {
+  type = number
+  default = 10
+  description = "The duration (in seconds) to wait for the NAT instance to finish starting up."
+}
+
+variable route_priority {
+  type = number
+  default = 900
+  description = "The priority to assign the networking route that routes traffic through this instance."
+}
+
 locals {
   region = join("-", slice(split("-", var.zone), 0, 2))
 
