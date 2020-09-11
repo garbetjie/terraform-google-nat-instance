@@ -52,3 +52,8 @@ output network_tags {
   value = google_compute_route.route.tags
   description = "Tags to which this instance's route applies."
 }
+
+output sysctl_config {
+  value = var.sysctl_config
+  description = "sysctl config applied on NAT instance boot."
+}

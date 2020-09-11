@@ -29,9 +29,13 @@ module nat_instance_01 {
   source = "garbetjie/nat-instance/google"
   address = google_compute_address.nat_instance.address  // Required
   zone = "europe-west3-a"                                // Required
-  machine_type = "f1-micro"                              // Optional
   disk_size = 15                                         // Optional
   disk_type = "pd-standard"                              // Optional
+  machine_type = "f1-micro"                              // Optional
+  network_tags = ["requires-nat-${local.region}"]        // Optional
+  route_priority = 900                                   // Optional
+  sysctl_config = {}                                     // Optional
+  wait_duration = 10                                     // Optional
 }
 ```
 
@@ -46,6 +50,7 @@ module nat_instance_01 {
 | machine_type   | Machine type of the instance.                                                                                                                  | string       | `f1-micro`                         | No       |
 | network_tags   | Tags to which this route applies.                                                                                                              | list(string) | `["requires-nat-${local.region}"]` | No       |
 | route_priority | The priority to assign the networking route that routes traffic through this instance.                                                         | number       | `900`                              | No       |
+| sysctl_config  | sysctl configuration to apply on startup.                                                                                                      | map(string)  | `{}`                               | No       |
 | wait_duration  | The duration (in seconds) to wait for the NAT instance to finish starting up.                                                                  | number       | `10`                               | No       |
 
 
@@ -62,5 +67,6 @@ module nat_instance_01 {
 | network_tags   | Tags to which this instance's routes applies.                                          |
 | route_name     | Name of the route used to route traffic through the instance.                          |
 | route_priority | Priority assigned to the networking route used to route traffic through this instance. |
+| sysctl_config  | sysctl config applied on NAT instance boot.                                            |
 | wait_duration  | The duration (in seconds) that was allowed for the NAT instance to finish booting.     |
 | zone           | Zone in which the Compute Engine instance has been placed.                             |
