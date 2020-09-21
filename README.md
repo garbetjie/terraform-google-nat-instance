@@ -70,3 +70,10 @@ module nat_instance_01 {
 | sysctl_config  | sysctl config applied on NAT instance boot.                                            |
 | wait_duration  | The duration (in seconds) that was allowed for the NAT instance to finish booting.     |
 | zone           | Zone in which the Compute Engine instance has been placed.                             |
+
+
+
+## Changelog
+
+* **2.0.0**
+    * Enable functioning as an HTTP forward proxy.
