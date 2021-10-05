@@ -34,6 +34,7 @@ module nat_instance_01 {
   machine_type = "f1-micro"                              // Optional
   network_tags = ["requires-nat-${local.region}"]        // Optional
   route_priority = 900                                   // Optional
+  socks_proxy = { enabled = true }                       // Optional
   sysctl_config = {}                                     // Optional
   wait_duration = 10                                     // Optional
 }
