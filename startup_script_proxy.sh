@@ -1,29 +1,40 @@
 #!/usr/bin/env bash
 
-apt-get install -y tinyproxy
+apt-get install -y dante-server
 
-cat <<EOT > /etc/tinyproxy/tinyproxy.conf
-User tinyproxy
-Group tinyproxy
-Port ${port}
-Listen ${address}
-BindSame yes
-Timeout ${timeout}
-MaxClients ${max_connections}
-StatHost "tinyproxy.stats"
-Syslog On
-LogLevel Info
-PidFile "/run/tinyproxy/tinyproxy.pid"
-MinSpareServers ${min_spare}
-MaxSpareServers ${max_spare}
-StartServers 10
-MaxRequestsPerChild 100
-Allow 10.0.0.0/8
-ViaProxyName "tinyproxy"
-#ConnectPort 443
-#ConnectPort 563
+cat <<EOT > /etc/danted.conf
+logoutput: stderr
+internal: ${address} port = ${port}
+external: ${address}
+clientmethod: none
+socksmethod: none
+debug: ${debug}
+user.privileged: proxy
+user.unprivileged: nobody
+user.libwrap: nobody
 
-XTinyproxy Yes
+%{~ for cidr in allowed_ranges ~}
+
+client pass {
+	from: ${cidr} port 1-65535 to: 0.0.0.0/0
+	log: connect error
+}
+
+socks pass {
+	from: ${cidr} to: 0.0.0.0/0
+	log: connect error
+}
+%{ endfor ~}
+
+client block {
+  from: 0.0.0.0/0 to: 0.0.0.0/0
+  log: connect error
+}
+
+socks block {
+	from: 0.0.0.0/0 to: 0.0.0.0/0
+	log: connect error
+}
 EOT
 
-systemctl reload tinyproxy
+systemctl restart danted

@@ -29,12 +29,13 @@ resource google_compute_address address {
 }
 
 resource google_compute_instance instance {
-  name = "nat-instance-${local.region}-${random_id.instance_suffix.hex}"
+  name = local.instance_name
   zone = random_id.instance_suffix.keepers.zone
   can_ip_forward = true
   machine_type = random_id.instance_suffix.keepers.machine_type
   metadata_startup_script = random_id.instance_suffix.keepers.startup_script
   metadata = local.instance_metadata
+  tags = [local.instance_name]
 
   boot_disk {
     initialize_params {
