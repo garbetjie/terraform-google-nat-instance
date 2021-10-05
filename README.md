@@ -82,6 +82,9 @@ module nat_instance_01 {
 
 ## Changelog
 
+* **3.0.1**
+  * Fix incorrect assumption that default value of `var.network_tags` is `null` when checking for empty tags.  
+
 * **3.0.0**
   * Remove HTTP forward proxy, and replaced it with a SOCKS proxy.
 

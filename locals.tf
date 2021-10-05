@@ -1,5 +1,5 @@
 locals {
-  network_tags = var.network_tags == null ? ["requires-nat-${local.region}"] : var.network_tags
+  network_tags = length(var.network_tags) == 0 ? ["requires-nat-${local.region}"] : var.network_tags
 
   region = join("-", slice(split("-", var.zone), 0, 2))
 
