@@ -57,3 +57,8 @@ output sysctl_config {
   value = var.sysctl_config
   description = "sysctl config applied on NAT instance boot."
 }
+
+output socks_proxy {
+  value = local.socks_proxy
+  description = "SOCKS proxy config applied."
+}

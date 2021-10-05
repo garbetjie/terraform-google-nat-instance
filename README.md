@@ -41,17 +41,22 @@ module nat_instance_01 {
 
 ## Inputs
 
-| Name           | Description                                                                                                                                    | Type         | Default                            | Required |
-|----------------|------------------------------------------------------------------------------------------------------------------------------------------------|--------------|------------------------------------|----------|
-| address        | The external IP address to assign to this instance.                                                                                            | string       |                                    | Yes      |
-| zone           | The zone in which to place this instance. Must be the same region as the IP address provided.                                                  | string       |                                    | Yes      |
-| disk_size      | Size of the instance's disk (in GB)                                                                                                            | number       | `15`                               | No       |
-| disk_type      | Type of the instance's disk (one of `pd-standard` or `pd-ssd`). `google` provider `>= 3.37` allows the option of `pd-balanced` to be provided. | string       | `pd-standard`                      | No       |
-| machine_type   | Machine type of the instance.                                                                                                                  | string       | `f1-micro`                         | No       |
-| network_tags   | Tags to which this route applies.                                                                                                              | list(string) | `["requires-nat-${local.region}"]` | No       |
-| route_priority | The priority to assign the networking route that routes traffic through this instance.                                                         | number       | `900`                              | No       |
-| sysctl_config  | sysctl configuration to apply on startup.                                                                                                      | map(string)  | `{}`                               | No       |
-| wait_duration  | The duration (in seconds) to wait for the NAT instance to finish starting up.                                                                  | number       | `10`                               | No       |
+| Name                | Description                                                                                                                                    | Type                                                                                                          | Default                            | Required |
+|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|------------------------------------|----------|
+| address             | The external IP address to assign to this instance.                                                                                            | string                                                                                                        |                                    | Yes      |
+| zone                | The zone in which to place this instance. Must be the same region as the IP address provided.                                                  | string                                                                                                        |                                    | Yes      |
+| disk_size           | Size of the instance's disk (in GB)                                                                                                            | number                                                                                                        | `15`                               | No       |
+| disk_type           | Type of the instance's disk (one of `pd-standard` or `pd-ssd`). `google` provider `>= 3.37` allows the option of `pd-balanced` to be provided. | string                                                                                                        | `pd-standard`                      | No       |
+| machine_type        | Machine type of the instance.                                                                                                                  | string                                                                                                        | `f1-micro`                         | No       |
+| network_tags        | Tags to which this route applies.                                                                                                              | list(string)                                                                                                  | `["requires-nat-${local.region}"]` | No       |
+| route_priority      | The priority to assign the networking route that routes traffic through this instance.                                                         | number                                                                                                        | `900`                              | No       |
+| socks_proxy         | Configuration for enabling a SOCKS proxy on this instance.                                                                                     | object({ enabled=bool, debug=optional(number), port=optional(number), allowed_ranged=optional(set(string)) }) | `{ enabled = false }`              | No       |
+| socks_proxy.enabled | Flag used to enable/disable the SOCKS proxy.                                                                                                   | bool                                                                                                          | `false`                            | No       |
+| socks_proxy.debug   | Debug log level used in the SOCKS proxy. Can be one of `0`, `1`, or `2`.                                                                       | number                                                                                                        | `0`                                | No       |
+| socks_proxy.port    | Port on which to bind the SOCKS proxy.                                                                                                         | number                                                                                                        | `8888`                             | No       |
+| allowed_ranges      | CIDR ranges allowed to connect to the proxy. Firewall rules will also be configured to allow these ranges to connect on the specified port.    | set(string)                                                                                                   | `[]`                               | No       |
+| sysctl_config       | sysctl configuration to apply on startup.                                                                                                      | map(string)                                                                                                   | `{}`                               | No       |
+| wait_duration       | The duration (in seconds) to wait for the NAT instance to finish starting up.                                                                  | number                                                                                                        | `10`                               | No       |
 
 
 ## Outputs
@@ -67,6 +72,7 @@ module nat_instance_01 {
 | network_tags   | Tags to which this instance's routes applies.                                          |
 | route_name     | Name of the route used to route traffic through the instance.                          |
 | route_priority | Priority assigned to the networking route used to route traffic through this instance. |
+| socks_proxy    | SOCKS proxy configuration applied to the NAT instance.                                 |
 | sysctl_config  | sysctl config applied on NAT instance boot.                                            |
 | wait_duration  | The duration (in seconds) that was allowed for the NAT instance to finish booting.     |
 | zone           | Zone in which the Compute Engine instance has been placed.                             |
@@ -75,5 +81,8 @@ module nat_instance_01 {
 
 ## Changelog
 
+* **3.0.0**
+  * Remove HTTP forward proxy, and replaced it with a SOCKS proxy.
+
 * **2.0.0**
-    * Enable functioning as an HTTP forward proxy.
+  * Enable functioning as an HTTP forward proxy.
